@@ -9,21 +9,45 @@
  * };
  */
 class Solution {
-public:
-    int pairSum(ListNode* head) {
-        vector<int> list;
-        ListNode * temp = head;
-        
+private:
+    ListNode* reverseLL(ListNode* head){
+        if(head == nullptr || head -> next == nullptr) return head;
+
+        ListNode* temp = head;
+        ListNode* front = head;
+        ListNode* prev = nullptr;
+
         while(temp != nullptr){
-            list.push_back(temp -> val);
-            temp = temp -> next;
-        }
-        int n = list.size();
-        int ans = 0;
-        for(int i = 0; i < n/2; i++){
-            ans  = max(ans , list[i] + list[n - i -1]);
+            front = temp -> next;
+            temp -> next = prev;
+            prev = temp;
+            temp = front;
         }
 
-        return ans;
+        return prev;
+    }
+public:
+    int pairSum(ListNode* head) {
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+        while(fast -> next -> next != nullptr){
+            slow = slow -> next;
+            fast = fast -> next -> next;
+        }
+
+        ListNode* newHead = reverseLL(slow -> next);
+
+        ListNode* first = head;
+        ListNode* second = newHead;
+        int sum = INT_MIN;
+        while(second != nullptr){
+            sum = max(sum, first -> val + second -> val);
+            first = first -> next;
+            second = second -> next;
+        }
+        reverseLL(newHead);
+
+        return sum;
     }
 };
