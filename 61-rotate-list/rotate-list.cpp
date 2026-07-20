@@ -9,40 +9,42 @@
  * };
  */
 class Solution {
-public:
-    int length(ListNode*head){
-        int cnt=0;
-        ListNode*temp=head;
-        while(temp!=nullptr){
+private:
+    int findLen(ListNode* head){
+        ListNode* temp = head;
+        int cnt = 0;
+        while(temp != nullptr){
             cnt++;
-            temp=temp->next;
+            temp = temp -> next;
         }
         return cnt;
     }
+public:
+   
     ListNode* rotateRight(ListNode* head, int k) {
-        if(head==nullptr||head->next==nullptr) return head;
-        ListNode*temp=head;
-        int n=1;
-        ListNode*tail=head;
-        while(tail->next!=nullptr){
-            n++;
-            tail=tail->next;
+        if(head == nullptr || head -> next == nullptr || k == 0) return head;
+
+        int len = findLen(head);
+        k = k % len;
+
+        ListNode* temp = head;
+        ListNode* tail = head;
+        ListNode* nextNode = head;
+        while(tail -> next != nullptr){
+            tail = tail -> next;
         }
-        k=k%n;
-        if(k==0) return head;
-        ListNode*prev=head;
-        int cnt=0;
-        while(temp->next!=nullptr){
+        tail -> next = head;
+        int cnt = 0;
+
+        while(temp != nullptr){
             cnt++;
-            prev=temp;
-            temp=temp->next;
-            if(cnt==n-k){
-                prev->next=nullptr;
+            if(cnt == len - k){
+                nextNode = temp -> next;
+                temp -> next = nullptr;
                 break;
             }
+            temp = temp -> next;
         }
-       tail->next=head;
-       head=temp;
-       return head;
+        return nextNode;
     }
 };
